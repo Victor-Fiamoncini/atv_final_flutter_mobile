@@ -1,6 +1,9 @@
+import 'package:atv_final_flutter_mobile/main/config/dotenv.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  await loadDotEnv();
+
   runApp(const App());
 }
 
