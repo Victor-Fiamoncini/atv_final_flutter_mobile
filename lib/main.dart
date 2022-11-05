@@ -1,4 +1,4 @@
-import 'package:atv_final_flutter_mobile/ui/pages/home_page.dart';
+import 'package:atv_final_flutter_mobile/main/factories/pages/home_page_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -98,7 +98,7 @@ class App extends StatelessWidget {
           actionTextColor: whiteColor,
         ),
       ),
-      home: const HomePage(),
+      home: makeHomePage(),
     );
   }
 }
