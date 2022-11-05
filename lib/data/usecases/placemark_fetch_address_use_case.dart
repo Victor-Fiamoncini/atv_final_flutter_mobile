@@ -22,10 +22,11 @@ class PlacemarkFetchAddressUseCase implements FetchAddressUseCase {
 
     return AddressEntity.fromMap({
       'street': address?.street.toString(),
-      'neighborhood': address?.sublocality.toString(),
-      'city': address?.locality
-          ? address.locality.toString()
-          : address?.subAdministrativeArea.toString(),
+      'neighborhood': address?.subLocality.toString(),
+      'city':
+          address?.locality != null && address.locality.toString().isNotEmpty
+              ? address.locality.toString()
+              : address?.subAdministrativeArea.toString(),
       'state': address?.administrativeArea.toString(),
       'postalCode': address?.postalCode.toString(),
       'country': address?.country.toString(),

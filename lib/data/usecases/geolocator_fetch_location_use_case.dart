@@ -12,8 +12,8 @@ class GeolocatorFetchLocationUseCase implements FetchLocationUseCase {
     final coordinates = await coordinatesClient.getCoordinates();
 
     return PositionEntity.fromMap({
-      'latitude': double.parse(coordinates?.latitude),
-      'longitude': double.parse(coordinates?.longigute),
+      'latitude': coordinates?.latitude,
+      'longitude': coordinates?.longitude,
     });
   }
 }
