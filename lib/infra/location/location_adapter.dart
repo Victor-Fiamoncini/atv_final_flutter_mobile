@@ -1,9 +1,10 @@
 import 'package:atv_final_flutter_mobile/data/location/location_client.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
-class LocationAdapter implements LocationClient {
+class LocationAdapter implements CoordinatesClient, PlacemarkClient {
   @override
-  Future getLocation() async {
+  Future getCoordinates() async {
     final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!isServiceEnabled) throw Exception('Location service not enabled');
@@ -25,5 +26,17 @@ class LocationAdapter implements LocationClient {
     );
 
     return position;
+  }
+
+  @override
+  Future getPlacemark(PlacemarkClientParams params) async {
+    final placemark = await placemarkFromCoordinates(
+      params.latitude,
+      params.longitude,
+    );
+
+    if (placemark.isNotEmpty) {
+      return placemark.first;
+    }
   }
 }
