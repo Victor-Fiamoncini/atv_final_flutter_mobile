@@ -1,4 +1,6 @@
+import 'package:atv_final_flutter_mobile/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
@@ -12,12 +14,91 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    final primaryColor = Colors.redAccent.shade100;
+    final tertiaryColor = Colors.green.shade200;
+    const whiteColor = Colors.white;
+    const blackColor = Colors.black;
+    const errorColor = Colors.red;
+    const backgroundColor = Colors.white;
+
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: primaryColor,
+        systemNavigationBarColor: primaryColor,
       ),
-      home: Container(),
+    );
+
+    return MaterialApp(
+      title: 'Weather Prediction',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme(
+          brightness: Brightness.light,
+          primary: primaryColor,
+          onPrimary: primaryColor,
+          secondary: whiteColor,
+          onSecondary: whiteColor,
+          tertiary: tertiaryColor,
+          onTertiary: tertiaryColor,
+          error: errorColor,
+          onError: errorColor,
+          background: backgroundColor,
+          onBackground: backgroundColor,
+          surface: whiteColor,
+          onSurface: whiteColor,
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: whiteColor,
+          selectionColor: primaryColor.withOpacity(0.9),
+          selectionHandleColor: blackColor,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+            ),
+            elevation: MaterialStateProperty.all(0),
+            backgroundColor: MaterialStateProperty.all(primaryColor),
+            padding: MaterialStateProperty.all(
+              const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+            ),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: whiteColor,
+          ),
+          filled: true,
+          fillColor: primaryColor,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: const BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+          errorStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: errorColor,
+          actionTextColor: whiteColor,
+        ),
+      ),
+      home: const HomePage(),
     );
   }
 }
