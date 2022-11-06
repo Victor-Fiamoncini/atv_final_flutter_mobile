@@ -1,6 +1,7 @@
 import 'package:atv_final_flutter_mobile/domain/entities/address_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_address_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_location_use_case.dart';
+import 'package:atv_final_flutter_mobile/domain/usecases/fetch_weather_use_case.dart';
 import 'package:atv_final_flutter_mobile/ui/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,10 +10,12 @@ import 'package:intl/intl.dart';
 class HomePage extends StatefulWidget {
   final FetchLocationUseCase fetchLocationUseCase;
   final FetchAddressUseCase fetchAddressUseCase;
+  final FetchWeatherUseCase fetchWeatherUseCase;
 
   const HomePage({
     required this.fetchLocationUseCase,
     required this.fetchAddressUseCase,
+    required this.fetchWeatherUseCase,
     super.key,
   });
 
@@ -25,6 +28,12 @@ class _HomePageState extends State<HomePage> {
     final position = await widget.fetchLocationUseCase.fetchLocation();
     final address = await widget.fetchAddressUseCase.fetchAddress(
       FetchAddressUseCaseParams(
+        latitude: position.latitude,
+        longitude: position.longitude,
+      ),
+    );
+    final weather = await widget.fetchWeatherUseCase.fetchWeather(
+      FetchWeatherUseCaseParams(
         latitude: position.latitude,
         longitude: position.longitude,
       ),
