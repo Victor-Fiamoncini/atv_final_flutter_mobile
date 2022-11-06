@@ -15,7 +15,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Colors.redAccent.shade100;
-    final tertiaryColor = Colors.green.shade200;
+    const tertiaryColor = Color.fromARGB(255, 19, 161, 149);
     const whiteColor = Colors.white;
     const blackColor = Colors.black;
     const errorColor = Colors.red;
