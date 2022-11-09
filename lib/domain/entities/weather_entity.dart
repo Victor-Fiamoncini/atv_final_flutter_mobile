@@ -5,6 +5,7 @@ class WeatherEntity {
   final double humidity;
   final double clouds;
   final double windSpeed;
+  final String iconName;
 
   const WeatherEntity({
     required this.mainTemperature,
@@ -13,6 +14,7 @@ class WeatherEntity {
     required this.humidity,
     required this.clouds,
     required this.windSpeed,
+    required this.iconName,
   });
 
   factory WeatherEntity.fromMap(Map map) {
@@ -23,6 +25,7 @@ class WeatherEntity {
       humidity: map['humidity'],
       clouds: map['clouds'],
       windSpeed: map['windSpeed'],
+      iconName: map['iconName'],
     );
 
     return weatherEntity;
