@@ -3,6 +3,7 @@ import 'package:atv_final_flutter_mobile/domain/entities/weather_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_address_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_location_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_weather_use_case.dart';
+import 'package:atv_final_flutter_mobile/domain/usecases/store_prediction_use_case.dart';
 import 'package:atv_final_flutter_mobile/ui/mappers/weather_icon_mapper.dart';
 import 'package:atv_final_flutter_mobile/ui/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,13 @@ class HomePage extends StatefulWidget {
   final FetchLocationUseCase fetchLocationUseCase;
   final FetchAddressUseCase fetchAddressUseCase;
   final FetchWeatherUseCase fetchWeatherUseCase;
+  final StorePredictionUseCase storePredictionUseCase;
 
   const HomePage({
     required this.fetchLocationUseCase,
     required this.fetchAddressUseCase,
     required this.fetchWeatherUseCase,
+    required this.storePredictionUseCase,
     super.key,
   });
 
@@ -26,7 +29,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<List> _getUserAddressAndWeather() async {
+  Future<Map> _getUserAddressAndWeather() async {
     final position = await widget.fetchLocationUseCase.fetchLocation();
     final address = await widget.fetchAddressUseCase.fetchAddress(
       FetchAddressUseCaseParams(
@@ -40,8 +43,31 @@ class _HomePageState extends State<HomePage> {
         longitude: position.longitude,
       ),
     );
+    final addressParams = AddressParams(
+      street: address.street,
+      neighborhood: address.neighborhood,
+      city: address.city,
+      state: address.state,
+      postalCode: address.postalCode,
+      country: address.country,
+    );
+    final weatherParams = WeatherParams(
+      mainTemperature: weather.mainTemperature,
+      maxTemperature: weather.maxTemperature,
+      minTemperature: weather.minTemperature,
+      humidity: weather.humidity,
+      clouds: weather.clouds,
+      windSpeed: weather.windSpeed,
+    );
 
-    return [address, weather];
+    await widget.storePredictionUseCase.storePrediction(
+      StorePredictionUseCaseParams(
+        address: addressParams,
+        weather: weatherParams,
+      ),
+    );
+
+    return {'address': address, 'weather': weather};
   }
 
   Widget _buildErrorMessage(ThemeData theme) {
@@ -59,8 +85,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildWeatherData(ThemeData theme, AsyncSnapshot snapshot) {
-    final address = snapshot.data?[0] as AddressEntity;
-    final weather = snapshot.data?[1] as WeatherEntity;
+    final address = snapshot.data['address'] as AddressEntity;
+    final weather = snapshot.data['weather'] as WeatherEntity;
 
     final now = DateTime.now();
     final date = DateFormat('dd/MM/yyyy').format(now);
@@ -150,7 +176,9 @@ class _HomePageState extends State<HomePage> {
                   child: FutureBuilder(
                     future: _getUserAddressAndWeather(),
                     builder: (context, snapshot) {
-                      if (snapshot.hasError) return _buildErrorMessage(theme);
+                      if (snapshot.hasError) {
+                        return _buildErrorMessage(theme);
+                      }
 
                       if (snapshot.hasData) {
                         return _buildWeatherData(theme, snapshot);
