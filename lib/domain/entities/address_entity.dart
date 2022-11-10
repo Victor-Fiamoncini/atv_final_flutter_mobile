@@ -14,17 +14,4 @@ class AddressEntity {
     required this.postalCode,
     required this.country,
   });
-
-  factory AddressEntity.fromMap(Map map) {
-    final addressEntity = AddressEntity(
-      street: map['street'],
-      neighborhood: map['neighborhood'],
-      city: map['city'],
-      state: map['state'],
-      postalCode: map['postalCode'],
-      country: map['country'],
-    );
-
-    return addressEntity;
-  }
 }

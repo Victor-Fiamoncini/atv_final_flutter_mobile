@@ -16,18 +16,4 @@ class WeatherEntity {
     required this.windSpeed,
     required this.iconName,
   });
-
-  factory WeatherEntity.fromMap(Map map) {
-    final weatherEntity = WeatherEntity(
-      minTemperature: map['minTemperature'],
-      maxTemperature: map['maxTemperature'],
-      mainTemperature: map['mainTemperature'],
-      humidity: map['humidity'],
-      clouds: map['clouds'],
-      windSpeed: map['windSpeed'],
-      iconName: map['iconName'],
-    );
-
-    return weatherEntity;
-  }
 }
