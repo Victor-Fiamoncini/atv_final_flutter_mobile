@@ -1,7 +1,9 @@
 import 'package:atv_final_flutter_mobile/domain/entities/address_entity.dart';
+import 'package:atv_final_flutter_mobile/domain/entities/weather_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_address_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_location_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_weather_use_case.dart';
+import 'package:atv_final_flutter_mobile/ui/mappers/weather_icon_mapper.dart';
 import 'package:atv_final_flutter_mobile/ui/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -24,7 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<AddressEntity> _getUserAddress() async {
+  Future<List> _getUserAddressAndWeather() async {
     final position = await widget.fetchLocationUseCase.fetchLocation();
     final address = await widget.fetchAddressUseCase.fetchAddress(
       FetchAddressUseCaseParams(
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    return address;
+    return [address, weather];
   }
 
   Widget _buildErrorMessage(ThemeData theme) {
@@ -53,6 +55,67 @@ class _HomePageState extends State<HomePage> {
           fontSize: 20,
         ),
       ),
+    );
+  }
+
+  Widget _buildWeatherData(ThemeData theme, AsyncSnapshot snapshot) {
+    final address = snapshot.data?[0] as AddressEntity;
+    final weather = snapshot.data?[1] as WeatherEntity;
+
+    final now = DateTime.now();
+    final date = DateFormat('dd/MM/yyyy').format(now);
+
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              address.city,
+              style: TextStyle(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              date,
+              style: TextStyle(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: weatherIconMapper(weather.iconName),
+              fit: BoxFit.cover,
+            )
+          ],
+        ),
+        const SizedBox(height: 2),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '${weather.mainTemperature.toInt()}°C',
+              style: TextStyle(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+                fontSize: 48,
+              ),
+            )
+          ],
+        )
+      ],
     );
   }
 
@@ -85,48 +148,12 @@ class _HomePageState extends State<HomePage> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   child: FutureBuilder(
-                    future: _getUserAddress(),
+                    future: _getUserAddressAndWeather(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) return _buildErrorMessage(theme);
 
                       if (snapshot.hasData) {
-                        final city = snapshot.data?.city ?? '';
-                        final date = DateFormat(DateFormat.YEAR_MONTH).format(
-                          DateTime.now(),
-                        );
-
-                        return Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  city,
-                                  style: TextStyle(
-                                    color: theme.colorScheme.primary,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                Text(
-                                  date,
-                                  style: TextStyle(
-                                    color: theme.colorScheme.primary,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        );
+                        return _buildWeatherData(theme, snapshot);
                       }
 
                       return _buildLoading(theme);
