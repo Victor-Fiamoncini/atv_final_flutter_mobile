@@ -11,6 +11,7 @@ class RemoteFetchWeatherMapper {
       minTemperature: double.parse(api['main']['temp_min'].toString()),
       maxTemperature: double.parse(api['main']['temp_max'].toString()),
       mainTemperature: double.parse(api['main']['temp'].toString()),
+      feelsLike: double.parse(api['main']['feels_like'].toString()),
       humidity: double.parse(api['main']['humidity'].toString()),
       clouds: double.parse(api['clouds']['all'].toString()),
       windSpeed: double.parse(api['wind']['speed'].toString()),
