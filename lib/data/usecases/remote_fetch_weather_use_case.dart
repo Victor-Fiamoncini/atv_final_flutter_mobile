@@ -20,14 +20,6 @@ class RemoteFetchWeatherUseCase implements FetchWeatherUseCase {
 
     if (response == null) throw Exception('Error to get remote weather data');
 
-    return WeatherEntity(
-      minTemperature: double.parse(response['main']['temp_min'].toString()),
-      maxTemperature: double.parse(response['main']['temp_max'].toString()),
-      mainTemperature: double.parse(response['main']['temp'].toString()),
-      humidity: double.parse(response['main']['humidity'].toString()),
-      clouds: double.parse(response['clouds']['all'].toString()),
-      windSpeed: double.parse(response['wind']['speed'].toString()),
-      iconName: response['weather'][0]['icon'],
-    );
+    return RemoteFetchWeatherMapper.toDomain(response);
   }
 }
