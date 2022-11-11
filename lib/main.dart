@@ -52,51 +52,6 @@ class App extends StatelessWidget {
           selectionColor: primaryColor.withOpacity(0.9),
           selectionHandleColor: blackColor,
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-              const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-            ),
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor: MaterialStateProperty.all(primaryColor),
-            padding: MaterialStateProperty.all(
-              const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-            ),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          hintStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: whiteColor,
-          ),
-          filled: true,
-          fillColor: primaryColor,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
-            borderSide: const BorderSide(
-              width: 0,
-              style: BorderStyle.none,
-            ),
-          ),
-          errorStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        snackBarTheme: const SnackBarThemeData(
-          backgroundColor: errorColor,
-          actionTextColor: whiteColor,
-        ),
       ),
       home: makeHomePage(),
     );
