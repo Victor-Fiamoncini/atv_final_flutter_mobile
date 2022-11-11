@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       mainTemperature: weather.mainTemperature,
       maxTemperature: weather.maxTemperature,
       minTemperature: weather.minTemperature,
+      feelsLike: weather.feelsLike,
       humidity: weather.humidity,
       clouds: weather.clouds,
       windSpeed: weather.windSpeed,
