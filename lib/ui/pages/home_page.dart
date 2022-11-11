@@ -29,27 +29,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<Map> _getUserAddressAndWeather() async {
-    final position = await widget.fetchLocationUseCase.fetchLocation();
-
-    final addressAndWeatherFutures = await Future.wait([
-      widget.fetchAddressUseCase.fetchAddress(
-        FetchAddressUseCaseParams(
-          latitude: position.latitude,
-          longitude: position.longitude,
-        ),
-      ),
-      widget.fetchWeatherUseCase.fetchWeather(
-        FetchWeatherUseCaseParams(
-          latitude: position.latitude,
-          longitude: position.longitude,
-        ),
-      ),
-    ]);
-
-    final address = addressAndWeatherFutures[0] as AddressEntity;
-    final weather = addressAndWeatherFutures[1] as WeatherEntity;
-
+  Future<void> _storeAddressAndWeatherData(
+    AddressEntity address,
+    WeatherEntity weather,
+  ) async {
     final addressParams = AddressParams(
       street: address.street,
       neighborhood: address.neighborhood,
@@ -75,6 +58,28 @@ class _HomePageState extends State<HomePage> {
         weather: weatherParams,
       ),
     );
+  }
+
+  Future<Map> _getUserAddressAndWeather() async {
+    final position = await widget.fetchLocationUseCase.fetchLocation();
+
+    final addressAndWeatherFutures = await Future.wait([
+      widget.fetchAddressUseCase.fetchAddress(
+        FetchAddressUseCaseParams(
+          latitude: position.latitude,
+          longitude: position.longitude,
+        ),
+      ),
+      widget.fetchWeatherUseCase.fetchWeather(
+        FetchWeatherUseCaseParams(
+          latitude: position.latitude,
+          longitude: position.longitude,
+        ),
+      ),
+    ]);
+
+    final address = addressAndWeatherFutures[0] as AddressEntity;
+    final weather = addressAndWeatherFutures[1] as WeatherEntity;
 
     return {'address': address, 'weather': weather};
   }
@@ -96,6 +101,8 @@ class _HomePageState extends State<HomePage> {
   Widget _buildWeatherData(ThemeData theme, AsyncSnapshot snapshot) {
     final address = snapshot.data['address'] as AddressEntity;
     final weather = snapshot.data['weather'] as WeatherEntity;
+
+    _storeAddressAndWeatherData(address, weather);
 
     final date = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
