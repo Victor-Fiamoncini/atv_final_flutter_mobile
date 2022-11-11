@@ -31,18 +31,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Future<Map> _getUserAddressAndWeather() async {
     final position = await widget.fetchLocationUseCase.fetchLocation();
-    final address = await widget.fetchAddressUseCase.fetchAddress(
-      FetchAddressUseCaseParams(
-        latitude: position.latitude,
-        longitude: position.longitude,
+
+    final addressAndWeatherFutures = await Future.wait([
+      widget.fetchAddressUseCase.fetchAddress(
+        FetchAddressUseCaseParams(
+          latitude: position.latitude,
+          longitude: position.longitude,
+        ),
       ),
-    );
-    final weather = await widget.fetchWeatherUseCase.fetchWeather(
-      FetchWeatherUseCaseParams(
-        latitude: position.latitude,
-        longitude: position.longitude,
+      widget.fetchWeatherUseCase.fetchWeather(
+        FetchWeatherUseCaseParams(
+          latitude: position.latitude,
+          longitude: position.longitude,
+        ),
       ),
-    );
+    ]);
+
+    final address = addressAndWeatherFutures[0] as AddressEntity;
+    final weather = addressAndWeatherFutures[1] as WeatherEntity;
+
     final addressParams = AddressParams(
       street: address.street,
       neighborhood: address.neighborhood,
@@ -51,6 +58,7 @@ class _HomePageState extends State<HomePage> {
       postalCode: address.postalCode,
       country: address.country,
     );
+
     final weatherParams = WeatherParams(
       mainTemperature: weather.mainTemperature,
       maxTemperature: weather.maxTemperature,
@@ -88,8 +96,7 @@ class _HomePageState extends State<HomePage> {
     final address = snapshot.data['address'] as AddressEntity;
     final weather = snapshot.data['weather'] as WeatherEntity;
 
-    final now = DateTime.now();
-    final date = DateFormat('dd/MM/yyyy').format(now);
+    final date = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -117,7 +124,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 28),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -138,6 +145,75 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.w600,
                 fontSize: 48,
               ),
+            )
+          ],
+        ),
+        const SizedBox(height: 28),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Mínima: ${weather.minTemperature.toInt()}°C',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Máxima: ${weather.maxTemperature.toInt()}°C',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Sensação: ${weather.feelsLike.toInt()}°C',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Humidade: ${weather.humidity.toInt()}%',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Nuvens: ${weather.clouds.toInt()}%',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Vento: ${(weather.windSpeed * 3.6).toStringAsFixed(2)} km/h',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             )
           ],
         )
@@ -164,8 +240,8 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: mediaQuery.size.width,
               constraints: BoxConstraints(
-                maxHeight: 400,
-                minHeight: 380,
+                minHeight: 320,
+                maxHeight: 380,
                 minWidth: mediaQuery.size.width,
               ),
               child: Card(
