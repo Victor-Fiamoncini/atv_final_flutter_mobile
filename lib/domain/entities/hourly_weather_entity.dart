@@ -1,6 +1,6 @@
 class HourlyWeatherEntity {
   final double mainTemperature;
-  final String predictionHour;
+  final int predictionHour;
   final String iconName;
 
   const HourlyWeatherEntity({

@@ -1,6 +1,7 @@
 import 'package:atv_final_flutter_mobile/domain/entities/address_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/entities/weather_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_address_use_case.dart';
+import 'package:atv_final_flutter_mobile/domain/usecases/fetch_hourly_weather_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_location_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_weather_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/store_prediction_use_case.dart';
@@ -14,12 +15,14 @@ class HomePage extends StatefulWidget {
   final FetchLocationUseCase fetchLocationUseCase;
   final FetchAddressUseCase fetchAddressUseCase;
   final FetchWeatherUseCase fetchWeatherUseCase;
+  final FetchHourlyWeatherUseCase fetchHourlyWeatherUseCase;
   final StorePredictionUseCase storePredictionUseCase;
 
   const HomePage({
     required this.fetchLocationUseCase,
     required this.fetchAddressUseCase,
     required this.fetchWeatherUseCase,
+    required this.fetchHourlyWeatherUseCase,
     required this.storePredictionUseCase,
     super.key,
   });
