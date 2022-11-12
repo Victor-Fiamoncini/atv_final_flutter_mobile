@@ -1,4 +1,5 @@
 import 'package:atv_final_flutter_mobile/domain/entities/address_entity.dart';
+import 'package:atv_final_flutter_mobile/domain/entities/hourly_weather_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/entities/weather_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_address_use_case.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_hourly_weather_use_case.dart';
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   Future<Map> _getUserAddressAndWeather() async {
     final position = await widget.fetchLocationUseCase.fetchLocation();
 
-    final addressAndWeatherFutures = await Future.wait([
+    final futures = await Future.wait([
       widget.fetchAddressUseCase.fetchAddress(
         FetchAddressUseCaseParams(
           latitude: position.latitude,
@@ -79,12 +80,23 @@ class _HomePageState extends State<HomePage> {
           longitude: position.longitude,
         ),
       ),
+      widget.fetchHourlyWeatherUseCase.fetchHourlyWeather(
+        FetchHourlyWeatherUseCaseParams(
+          latitude: position.latitude,
+          longitude: position.longitude,
+        ),
+      ),
     ]);
 
-    final address = addressAndWeatherFutures[0] as AddressEntity;
-    final weather = addressAndWeatherFutures[1] as WeatherEntity;
+    final address = futures[0] as AddressEntity;
+    final weather = futures[1] as WeatherEntity;
+    final hourlyWeather = futures[2] as List<HourlyWeatherEntity>;
 
-    return {'address': address, 'weather': weather};
+    return {
+      'address': address,
+      'weather': weather,
+      'hourlyWeather': hourlyWeather,
+    };
   }
 
   Widget _buildErrorMessage(ThemeData theme) {
@@ -104,6 +116,8 @@ class _HomePageState extends State<HomePage> {
   Widget _buildWeatherData(ThemeData theme, AsyncSnapshot snapshot) {
     final address = snapshot.data['address'] as AddressEntity;
     final weather = snapshot.data['weather'] as WeatherEntity;
+    final hourlyWeather =
+        snapshot.data['hourlyWeather'] as List<HourlyWeatherEntity>;
 
     _storeAddressAndWeatherData(address, weather);
 
@@ -224,6 +238,7 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 16,
                   ),
                 ),
+                Text(hourlyWeather[0].predictionHour.toString()),
               ],
             )
           ],
