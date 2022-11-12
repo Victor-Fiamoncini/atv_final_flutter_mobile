@@ -8,10 +8,10 @@ class HourlyWeatherList extends StatelessWidget {
 
   const HourlyWeatherList({required this.hourlyWeatherItems, super.key});
 
-  String _formatTime(int time) {
-    final epoch = DateTime.fromMicrosecondsSinceEpoch(time * 1000);
+  String _getFormattedHour(int time) {
+    final epoch = DateTime.fromMillisecondsSinceEpoch(time * 1000);
 
-    return DateFormat('jm').format(epoch);
+    return DateFormat('HH:mm').format(epoch);
   }
 
   @override
@@ -48,7 +48,7 @@ class HourlyWeatherList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    _formatTime(hourlyWeatherItem.predictionHour),
+                    _getFormattedHour(hourlyWeatherItem.predictionHour),
                     style: TextStyle(
                       color: theme.colorScheme.primary,
                       fontWeight: FontWeight.w600,
