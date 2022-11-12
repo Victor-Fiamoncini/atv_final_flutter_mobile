@@ -8,6 +8,7 @@ import 'package:atv_final_flutter_mobile/domain/usecases/fetch_weather_use_case.
 import 'package:atv_final_flutter_mobile/domain/usecases/store_prediction_use_case.dart';
 import 'package:atv_final_flutter_mobile/ui/mappers/weather_icon_mapper.dart';
 import 'package:atv_final_flutter_mobile/ui/widgets/background_wrapper.dart';
+import 'package:atv_final_flutter_mobile/ui/widgets/hourly_weather_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -149,7 +150,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 22),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -173,7 +174,7 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 22),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,11 +239,12 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 16,
                   ),
                 ),
-                Text(hourlyWeather[0].predictionHour.toString()),
               ],
             )
           ],
-        )
+        ),
+        const SizedBox(height: 22),
+        HourlyWeatherList(hourlyWeatherItems: hourlyWeather),
       ],
     );
   }
@@ -266,8 +268,8 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: mediaQuery.size.width,
               constraints: BoxConstraints(
-                minHeight: 320,
-                maxHeight: 380,
+                minHeight: 440,
+                maxHeight: 460,
                 minWidth: mediaQuery.size.width,
               ),
               child: Card(
