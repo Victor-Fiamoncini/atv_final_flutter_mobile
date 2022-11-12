@@ -274,6 +274,12 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Card(
                 elevation: 50,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: theme.colorScheme.tertiary,
+                  ),
+                  borderRadius: BorderRadius.circular(6),
+                ),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
