@@ -1,8 +1,11 @@
 import 'package:atv_final_flutter_mobile/domain/entities/hourly_weather_entity.dart';
-import 'package:atv_final_flutter_mobile/domain/usecases/fetch_weather_use_case.dart';
+import 'package:atv_final_flutter_mobile/domain/usecases/fetch_hourly_weather_use_case.dart';
 
 class RemoteFetchHourlyWeatherMapper {
-  static String toApi(String apiEndpoint, FetchWeatherUseCaseParams params) {
+  static String toApi(
+    String apiEndpoint,
+    FetchHourlyWeatherUseCaseParams params,
+  ) {
     return '$apiEndpoint&lat=${params.latitude}&lon=${params.longitude}';
   }
 
