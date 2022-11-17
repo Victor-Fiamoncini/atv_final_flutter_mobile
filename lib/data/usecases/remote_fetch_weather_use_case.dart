@@ -1,10 +1,10 @@
-import 'package:atv_final_flutter_mobile/data/http/http_client.dart';
+import 'package:atv_final_flutter_mobile/data/http/http_get_client.dart';
 import 'package:atv_final_flutter_mobile/data/mappers/remote_fetch_weather_mapper.dart';
 import 'package:atv_final_flutter_mobile/domain/entities/weather_entity.dart';
 import 'package:atv_final_flutter_mobile/domain/usecases/fetch_weather_use_case.dart';
 
 class RemoteFetchWeatherUseCase implements FetchWeatherUseCase {
-  final HttpClient httpClient;
+  final HttpGetClient httpClient;
   final String apiEndpoint;
 
   const RemoteFetchWeatherUseCase({
@@ -16,7 +16,7 @@ class RemoteFetchWeatherUseCase implements FetchWeatherUseCase {
   Future<WeatherEntity> fetchWeather(FetchWeatherUseCaseParams params) async {
     final mappedUrl = RemoteFetchWeatherMapper.toApi(apiEndpoint, params);
 
-    final response = await httpClient.request(method: 'get', url: mappedUrl);
+    final response = await httpClient.get(url: mappedUrl);
 
     if (response == null) throw Exception('Error to get remote weather data');
 
