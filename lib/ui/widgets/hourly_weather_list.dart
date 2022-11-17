@@ -41,7 +41,7 @@ class HourlyWeatherList extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
                 color: theme.colorScheme.secondary,
                 border: Border.all(
-                  color: theme.colorScheme.tertiary.withOpacity(0.6),
+                  color: theme.colorScheme.tertiary,
                 ),
               ),
               child: Column(
