@@ -22,5 +22,5 @@ const weatherIcons = {
 };
 
 AssetImage weatherIconMapper(String iconCode) {
-  return weatherIcons[iconCode] ?? const AssetImage('fallback.png');
+  return weatherIcons[iconCode] ?? const AssetImage('assets/fallback.png');
 }
