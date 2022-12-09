@@ -22,7 +22,7 @@ class LocationAdapter implements CoordinatesClient, PlacemarkClient {
     }
 
     final position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
+      forceAndroidLocationManager: true,
     );
 
     return position;
